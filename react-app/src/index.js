@@ -11,11 +11,13 @@ import {
 } from "react-router-dom";
 import Navbar from "./navigation/NavBar";
 import LandingPage from "./pages/Landing";
+import RegisterPage from "./pages/Register";
+import LoginPage from "./pages/Login";
 
 const Layout = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Outlet />
     </div>
   );
@@ -25,6 +27,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />}>
       <Route path="/" element={<LandingPage />}></Route>
+      <Route path="/register" element={<RegisterPage />}></Route>
+      <Route path="/login" element={<LoginPage />}></Route>
     </Route>
   )
 );
