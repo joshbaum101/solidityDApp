@@ -53,7 +53,7 @@ const Navbar = () => {
 								</li>
 
 								<li class="nav-item">
-									<Link className="navbar-text" to="/wallet">Start a Fundraiser</Link>
+									<Link className="navbar-text" to="/createFundraiser">Start a Fundraiser</Link>
 								</li>
 
 								<li class="nav-item">

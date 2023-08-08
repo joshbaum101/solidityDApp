@@ -13,7 +13,7 @@ import Navbar from "./navigation/NavBar";
 import LandingPage from "./pages/Landing";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/Login";
-
+import FundraiserCreationPage from "./pages/CreateFund";
 const Layout = () => {
   return (
     <div>
@@ -29,6 +29,10 @@ const router = createBrowserRouter(
       <Route path="/" element={<LandingPage />}></Route>
       <Route path="/register" element={<RegisterPage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
+      <Route
+        path="/createFundraiser"
+        element={<FundraiserCreationPage />}
+      ></Route>
     </Route>
   )
 );
