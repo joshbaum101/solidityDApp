@@ -24,6 +24,26 @@ contract Fundraiser {
         _;
     }
 
+    function getTitle() public view returns (string memory) {
+        return title;
+    }
+
+    function getDescription() public view returns (string memory) {
+        return description;
+    }
+
+    function getGoal() public view returns (uint256) {
+        return goal;
+    }
+
+    function getRaisedAmount() public view returns (uint256) {
+        return raisedAmount;
+    }
+
+    function getOwner() public view returns (address) {
+        return owner;
+    }
+
     function contribute() external payable {
         require(msg.value > 0, "Contribution amount must be greater than 0");
         require(raisedAmount + msg.value <= goal, "Goal has been reached");

@@ -14,6 +14,9 @@ import LandingPage from "./pages/Landing";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/Login";
 import FundraiserCreationPage from "./pages/CreateFund";
+import AllFundraisersPage from "./pages/AllFunds";
+import FundraiserDetailsPage from "./pages/FundDetails";
+
 const Layout = () => {
   return (
     <div>
@@ -33,6 +36,11 @@ const router = createBrowserRouter(
         path="/createFundraiser"
         element={<FundraiserCreationPage />}
       ></Route>
+      <Route path="/allFundraisers" element={<AllFundraisersPage />}></Route>
+      <Route
+        path="/fundraiserDetails/:address"
+        element={<FundraiserDetailsPage />}
+      ></Route>
     </Route>
   )
 );
@@ -40,10 +48,3 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
-
-// const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
