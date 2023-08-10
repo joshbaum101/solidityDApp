@@ -46,6 +46,9 @@ const Navbar = () => {
 										<li  class="nav-item">
 											<Link onClick={handleLogout} className="navbar-text" to="/">Log out</Link>
 										</li>
+										<li class="nav-item">
+											<Link className="navbar-text" to="/myFundraisers">My Fundraisers</Link>
+										</li>
 									</>
 								)}
 								<li class="nav-item">
@@ -56,9 +59,7 @@ const Navbar = () => {
 									<Link className="navbar-text" to="/createFundraiser">Start a Fundraiser</Link>
 								</li>
 
-								<li class="nav-item">
-									<Link className="navbar-text" to="/faucet">My Fundraisers</Link>
-								</li>
+								
 							</ul>
 						</div>
 					</div>
