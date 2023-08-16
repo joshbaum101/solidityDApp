@@ -44,6 +44,10 @@ function LoginPage() {
 
         
         try{
+            toast.success("Logging in...", {
+                position: "top-right",
+                theme: "light",
+            });
             const response = await axios.post("http://localhost:5000/login", {
                 userName,
                 password

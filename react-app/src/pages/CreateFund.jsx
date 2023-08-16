@@ -20,43 +20,47 @@ function FundraiserCreationPage() {
 
     const createFundraiser = async () => {
         console.log("sent");
-        // const validTitle = /^[A-Za-z0-9\s]+$/.test(title);
-        // const validDescription = /^[A-Za-z0-9\s.,!?()-]*$/.test(description);
-        // const validNumber = /^[1-9]|10$/.test(goal);
+        const validTitle = /^[A-Za-z0-9\s]+$/.test(title);
+        const validDescription = /^[A-Za-z0-9\s.,!?()-]*$/.test(description);
+        const validNumber = /^[1-9]|10$/.test(goal);
 
-        // if(!title || !description || !goal){
-        //     toast.error("Title, Description, and Goal Required!", {
-		// 		position: "top-right",
-		// 		theme: "light",
-		// 	});
-		// 	return;
-        // }
+        if(!title || !description || !goal){
+            toast.error("Title, Description, and Goal Required!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+        }
 
-        // if (!validTitle) {
-		// 	toast.error("Invalid Title!", {
-		// 		position: "top-right",
-		// 		theme: "light",
-		// 	});
-		// 	return;
-		// }
+        if (!validTitle) {
+			toast.error("Invalid Title!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
 
-        // if (!validDescription) {
-		// 	toast.error("Invalid Description!", {
-		// 		position: "top-right",
-		// 		theme: "light",
-		// 	});
-		// 	return;
-		// }
+        if (!validDescription) {
+			toast.error("Invalid Description!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
 
-        // if (!validNumber) {
-		// 	toast.error("Invalid Number!", {
-		// 		position: "top-right",
-		// 		theme: "light",
-		// 	});
-		// 	return;
-		// }
+        if (!validNumber) {
+			toast.error("Invalid Number!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
         
         try{
+            toast.success("Fundraiser Creation Pending", {
+                position: "top-right",
+                theme: "light",
+            });
             console.log("try")
             const response = await axios.post("http://localhost:5000/create-fundraiser", {
                 title,

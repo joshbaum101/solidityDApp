@@ -43,6 +43,10 @@ function RegisterPage() {
 		}
 
         try{
+            toast.success("Registering  user...", {
+                position: "top-right",
+                theme: "light",
+            });
             const response = await axios.post("http://localhost:5000/register", {
                 userName,
                 password

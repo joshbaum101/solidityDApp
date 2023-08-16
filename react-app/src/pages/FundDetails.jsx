@@ -45,7 +45,7 @@ function FundraiserDetailsPage() {
 			return;
 		}
 
-        if(donation + fundraiser.raisedAmount > fundraiser.goal){
+        if(Number(donation) + Number(fundraiser.raisedAmount) > Number(fundraiser.goal)){
             toast.error("Exceeding fundraising goal!", {
 				position: "top-right",
 				theme: "light",
@@ -54,6 +54,10 @@ function FundraiserDetailsPage() {
         }
         
         try{
+            toast.success("Donation Pending", {
+                position: "top-right",
+                theme: "light",
+            });
             console.log("sent");
             console.log(donation);
             console.log(typeof donation)

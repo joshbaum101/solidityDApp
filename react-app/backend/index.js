@@ -166,6 +166,7 @@ app.post("/create-fundraiser", async (req, res) => {
     const addGas = await addContractTransaction.estimateGas({
       from: accounts[0],
     });
+    console.log("5");
 
     const addOptions = {
       from: accounts[0],
@@ -357,109 +358,6 @@ app.delete("/remove-fundraiser/:fundraiserAddress", async (req, res) => {
     res.status(500).json({ error: "An error occurred during removal" });
   }
 });
-
-// app.post("/donate/:fundraiserAddress", async (req, res) => {
-//   try {
-//     const { amount } = req.body;
-//     console.log("amount: " + amount);
-//     const { fundraiserAddress } = req.params;
-//     console.log("fundraiserAddress: " + fundraiserAddress);
-
-//     const provider = new HDWalletProvider(mnemonic, infuraKey); // Replace with your Ethereum node URL
-//     const web3 = new Web3(provider);
-//     const accounts = await web3.eth.getAccounts();
-
-//     const fundraiserContract = new web3.eth.Contract(
-//       FundraiserABI,
-//       fundraiserAddress
-//     );
-//     // console.log("fundraiser contract: ", fundraiserContract);
-
-//     const etherAmount = web3.utils.toWei(amount.toString(), "ether");
-//     console.log("etherAmount: ", etherAmount);
-
-//     const transaction = await fundraiserContract.methods.contribute().send({
-//       from: accounts[0],
-//       value: etherAmount,
-//       gasPrice: await web3.eth.getGasPrice(), // Get the current gas price
-//       gas: await fundraiserContract.methods.contribute().estimateGas({
-//         from: accounts[0],
-//         value: etherAmount,
-//       }),
-//     });
-//     console.log("transaction: " + JSON.stringify(transaction, null, 2));
-
-//     const gas = await transaction.estimateGas({
-//       from: accounts[0],
-//     });
-//     console.log("gas: " + gas);
-
-//     const options = {
-//       from: accounts[0],
-//       gas,
-//       value: etherAmount,
-//     };
-
-//     const result = await transaction.send({
-//       ...options,
-//       gasPrice: await web3.eth.getGasPrice(),
-//     });
-//     console.log("result: " + result.transactionHash);
-
-//     res.status(200).json({ transactionHash: result.transactionHash });
-//   } catch (error) {
-//     console.error("Error during donation:", error);
-//     res.status(500).json({ error: "An error occurred during donation" });
-//   }
-// });
-
-// app.post("/donate/:fundraiserAddress", async (req, res) => {
-//   try {
-//     const { amount } = req.body;
-//     console.log("amount " + amount);
-//     const { fundraiserAddress } = req.params;
-//     console.log(fundraiserAddress);
-
-//     const provider = new HDWalletProvider(mnemonic, infuraKey); // Replace with your Ethereum node URL
-//     const web3 = new Web3(provider);
-//     const accounts = await web3.eth.getAccounts();
-
-//     const fundraiserContract = new web3.eth.Contract(
-//       FundraiserABI,
-//       fundraiserAddress
-//     );
-//     console.log("fundraiser con: " + fundraiserContract);
-//     const tempAmount = amount;
-//     console.log("temp" + tempAmount);
-//     const transaction = fundraiserContract.methods.contribute(tempAmount);
-//     console.log("transaction: " + JSON.stringify(transaction, null, 2));
-//     try {
-//       // const gasLimit = 300000;
-//       const gas = await transaction.estimateGas({
-//         from: accounts[0],
-//         // gas: gasLimit,
-//       });
-//       console.log("gas: " + gas);
-//     } catch (gasError) {
-//       console.error("Error estimating gas:", gasError);
-//       res.status(500).json({ error: "Error estimating gas" });
-//     }
-//     const options = {
-//       from: accounts[0],
-//       // gas,
-//     };
-//     // Use the provider to send the transaction
-//     const result = await transaction.send({
-//       ...options,
-//       gasPrice: await web3.eth.getGasPrice(),
-//     });
-//     console.log("result:" + result);
-//     res.status(200).json({ transactionHash: result.transactionHash });
-//   } catch (error) {
-//     console.error("Error during donation:", error);
-//     res.status(500).json({ error: "An error occurred during donation" });
-//   }
-// });
 
 // Start the server
 app.listen(port, () => {
