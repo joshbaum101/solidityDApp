@@ -4,26 +4,24 @@ import { Button, Row } from "react-bootstrap";
 import Navbar from "../navigation/NavBar";
 import axios from "axios";
 
-function AllFundraisersPage() {
+function MyFundraisersPage() {
     const temp = [];
     const [fundraisersArr, setFundraisersArr] = useState([]);
     
 
     useEffect(() => {
-		(async function getFundraisers() {
-			const fundraisers = await axios.get(
-				"http://localhost:5000/get-fundraisers"
-			);
-			
-            fundraisers.data.forEach((e) => {
-                console.log(e.address);
-                temp.push(e);
-            })
-            setFundraisersArr(temp);
-            console.log(temp);
-            console.log(temp.length);
-		})();
-	}, []);
+        (async function getFundraisers() {
+            const fundraisers = await axios.get(
+                "http://localhost:5000/get-fundraisers"
+            );
+    
+            const userFundraisers = fundraisers.data.filter(
+                (fundraiser) => fundraiser.owner === fundraiser.userAddress
+            );
+    
+            setFundraisersArr(userFundraisers);
+        })();
+    }, []);
 
 	return (
 		<div>
@@ -36,7 +34,7 @@ function AllFundraisersPage() {
                 <div className="card-body">
                     <div>
                         <h4 className="center-text">
-                            All Active Fundraisers
+                            My Active Fundraisers
                         </h4>
                     </div>
                     <div className="scrollable-3">
@@ -77,4 +75,4 @@ function AllFundraisersPage() {
 	);
 }
 
-export default AllFundraisersPage;
+export default MyFundraisersPage;

@@ -5,17 +5,63 @@ import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../navigation/NavBar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function FundraiserCreationPage() {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [goal, setGoal] = useState("");
+    const [loggedIn, setLoggedIn] = useState(
+		secureLocalStorage.getItem("userId")
+	);
     const navigate = useNavigate();
 
     const createFundraiser = async () => {
+        console.log("sent");
+        const validTitle = /^[A-Za-z0-9\s]+$/.test(title);
+        const validDescription = /^[A-Za-z0-9\s.,!?()-]*$/.test(description);
+        const validNumber = /^[1-9]|10$/.test(goal);
+
+        if(!title || !description || !goal){
+            toast.error("Title, Description, and Goal Required!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+        }
+
+        if (!validTitle) {
+			toast.error("Invalid Title!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
+
+        if (!validDescription) {
+			toast.error("Invalid Description!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
+
+        if (!validNumber) {
+			toast.error("Invalid Number!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
         
         try{
+            toast.success("Fundraiser Creation Pending", {
+                position: "top-right",
+                theme: "light",
+            });
+            console.log("try")
             const response = await axios.post("http://localhost:5000/create-fundraiser", {
                 title,
                 description,
@@ -33,6 +79,18 @@ function FundraiserCreationPage() {
 	return (
 		<div>
             <Navbar></Navbar>
+            <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+            />
 			<br />
 			<div className="bg-glass-4">
 				<h1 className="center-text" style={{ paddingTop: 10 }}>
@@ -83,7 +141,7 @@ function FundraiserCreationPage() {
 						}}
                     />
                     <Form.Text id="passwordHelpBlock" >
-                        How much are you looking to raise? Must be between 1-10 Sepolia.
+                        How much are you looking to raise? Must be between 1-10 units.
                     </Form.Text>
                     </>
                     <br></br>

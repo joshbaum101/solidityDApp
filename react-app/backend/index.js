@@ -123,13 +123,13 @@ app.post("/logout", (req, res) => {
       return res.status(500).json({ error: "An error occurred during logout" });
     }
 
-    // Return a success response to the client
     res.status(200).json({ message: "Logout successful" });
   });
 });
 
 app.post("/create-fundraiser", async (req, res) => {
   try {
+    console.log("start");
     const { title, description, goal } = req.body;
 
     const provider = new HDWalletProvider(mnemonic, infuraKey);
@@ -139,12 +139,12 @@ app.post("/create-fundraiser", async (req, res) => {
 
     const fundraiserContract = new web3.eth.Contract(FundraiserABI);
     const deployTransaction = fundraiserContract.deploy({
-      data: fundraiserByteCode, // Replace with the compiled bytecode of the fundraiser contract
+      data: fundraiserByteCode,
       arguments: [title, description, goal],
     });
-
+    console.log("2");
     const gas = await deployTransaction.estimateGas({ from: accounts[0] });
-
+    console.log(gas);
     const options = {
       from: accounts[0],
       gas,
@@ -154,7 +154,7 @@ app.post("/create-fundraiser", async (req, res) => {
       ...options,
       gasPrice: await web3.eth.getGasPrice(),
     });
-
+    console.log("3");
     const registryContract = new web3.eth.Contract(
       FundraiserRegistryABI,
       registryAddress
@@ -162,10 +162,11 @@ app.post("/create-fundraiser", async (req, res) => {
     const addContractTransaction = registryContract.methods.registerFundraiser(
       deployedContract.options.address
     );
-
+    console.log("4");
     const addGas = await addContractTransaction.estimateGas({
       from: accounts[0],
     });
+    console.log("5");
 
     const addOptions = {
       from: accounts[0],
@@ -218,6 +219,9 @@ app.get("/get-fundraisers", async (req, res) => {
       ).toString();
       const owner = await fundraiserContract.methods.getOwner().call();
 
+      const accounts = await web3.eth.getAccounts();
+      const userAddress = accounts[0];
+
       fundraisers.push({
         address: fundraiserAddress,
         title,
@@ -225,6 +229,7 @@ app.get("/get-fundraisers", async (req, res) => {
         goal,
         raisedAmount,
         owner,
+        userAddress,
       });
     }
 
@@ -274,6 +279,83 @@ app.get("/get-fundraiser/:address", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while fetching fundraiser details" });
+  }
+});
+
+app.post("/donate/:fundraiserAddress", async (req, res) => {
+  try {
+    const { amount } = req.body;
+    console.log("amount: " + amount);
+    const { fundraiserAddress } = req.params;
+    // console.log("fundraiserAddress: " + fundraiserAddress);
+
+    const provider = new HDWalletProvider(mnemonic, infuraKey); // Replace with your Ethereum node URL
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+
+    const fundraiserContract = new web3.eth.Contract(
+      FundraiserABI,
+      fundraiserAddress
+    );
+    // console.log("fundraiser contract: ", fundraiserContract);
+
+    // const etherAmount = web3.utils.toWei(amount.toString(), "ether");
+    // console.log("etherAmount: ", etherAmount);
+    const weiAmount = web3.utils.toWei(amount, "wei");
+
+    const transaction = fundraiserContract.methods.contribute().send({
+      from: accounts[0],
+      value: weiAmount,
+      gasPrice: await web3.eth.getGasPrice(),
+      gas: await fundraiserContract.methods.contribute().estimateGas({
+        from: accounts[0],
+        value: weiAmount,
+      }),
+    });
+
+    const result = await transaction;
+    console.log("result: " + result.transactionHash);
+
+    res.status(200).json({ transactionHash: result.transactionHash });
+  } catch (error) {
+    console.error("Error during donation:", error);
+    res.status(500).json({ error: "An error occurred during donation" });
+  }
+});
+
+app.delete("/remove-fundraiser/:fundraiserAddress", async (req, res) => {
+  try {
+    const { fundraiserAddress } = req.params;
+
+    const provider = new HDWalletProvider(mnemonic, infuraKey);
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+
+    const registryContract = new web3.eth.Contract(
+      FundraiserRegistryABI,
+      registryAddress
+    );
+
+    const transaction =
+      registryContract.methods.removeFundraiser(fundraiserAddress);
+    console.log(transaction);
+
+    const gas = await transaction.estimateGas({ from: accounts[0] });
+    console.log(gas);
+    const options = {
+      from: accounts[0],
+      gas,
+    };
+
+    const result = await transaction.send({
+      ...options,
+      gasPrice: await web3.eth.getGasPrice(),
+    });
+
+    res.status(200).json({ transactionHash: result.transactionHash });
+  } catch (error) {
+    console.error("Error during removal:", error);
+    res.status(500).json({ error: "An error occurred during removal" });
   }
 });
 

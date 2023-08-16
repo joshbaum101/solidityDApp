@@ -5,6 +5,8 @@ import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../navigation/NavBar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function LoginPage() {
 
@@ -13,8 +15,39 @@ function LoginPage() {
     const navigate = useNavigate();
 
     const loginUser = async () => {
+        const validUsername = /^[a-zA-Z0-9_]{3,16}$/.test(userName);
+        const validPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(password);
+
+        if(!userName || !password){
+            toast.error("Both Username and Password Required!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+        }
+
+        if (!validUsername) {
+			toast.error("Invalid Username!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
+
+		if (!validPassword) {
+			toast.error("Invalid Password!", {
+				position: "top-right",
+				theme: "light",
+			});
+			return;
+		}
+
         
         try{
+            toast.success("Logging in...", {
+                position: "top-right",
+                theme: "light",
+            });
             const response = await axios.post("http://localhost:5000/login", {
                 userName,
                 password
@@ -27,6 +60,10 @@ function LoginPage() {
             // console.log(JSON.stringify(userIdResponse))
             const userId = userIdResponse.data.userId;
             secureLocalStorage.setItem("userId", userId);
+            toast.success("Successful Login", {
+                position: "top-right",
+                theme: "light",
+            });
             navigate("/");
         }catch (error){
             console.log("Login error: " + error)
@@ -36,6 +73,18 @@ function LoginPage() {
 	return (
 		<div>
             <Navbar></Navbar>
+            <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="colored"
+            />
 			<br />
 			<div className="bg-glass-4">
 				<h1 className="center-text" style={{ paddingTop: 10 }}>

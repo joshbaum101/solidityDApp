@@ -16,6 +16,7 @@ import LoginPage from "./pages/Login";
 import FundraiserCreationPage from "./pages/CreateFund";
 import AllFundraisersPage from "./pages/AllFunds";
 import FundraiserDetailsPage from "./pages/FundDetails";
+import MyFundraisersPage from "./pages/MyFunds";
 
 const Layout = () => {
   return (
@@ -41,6 +42,7 @@ const router = createBrowserRouter(
         path="/fundraiserDetails/:address"
         element={<FundraiserDetailsPage />}
       ></Route>
+      <Route path="/myFundraisers" element={<MyFundraisersPage />}></Route>
     </Route>
   )
 );
