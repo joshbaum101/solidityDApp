@@ -86,6 +86,10 @@ function FundraiserDetailsPage() {
 			return;
         }
         try{
+            toast.success("Completion Pending", {
+                position: "top-right",
+                theme: "light",
+            });
             console.log("sent");
             const response = await axios.delete(`http://localhost:5000/remove-fundraiser/${address}`, {
             });   

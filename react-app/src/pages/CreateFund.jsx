@@ -70,7 +70,7 @@ function FundraiserCreationPage() {
             
             console.log("Response:" + response.data)
             console.log(response)
-            navigate("/");
+            navigate("/allFundraisers");
         }catch (error){
             console.log("Fundraiser creation error: " + error)
         }
