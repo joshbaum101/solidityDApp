@@ -150,10 +150,17 @@ app.post("/create-fundraiser", async (req, res) => {
       gas,
     };
 
+    const gasPriceGwei = 10;
+    const gasPriceWei = web3.utils.toWei(gasPriceGwei, "gwei");
+
     const deployedContract = await deployTransaction.send({
       ...options,
-      gasPrice: await web3.eth.getGasPrice(),
+      gasPrice: gasPriceWei,
     });
+    // const deployedContract = await deployTransaction.send({
+    //   ...options,
+    //   gasPrice: await web3.eth.getGasPrice(),
+    // });
     console.log("3");
     const registryContract = new web3.eth.Contract(
       FundraiserRegistryABI,
@@ -297,21 +304,30 @@ app.post("/donate/:fundraiserAddress", async (req, res) => {
       FundraiserABI,
       fundraiserAddress
     );
-    // console.log("fundraiser contract: ", fundraiserContract);
+    const gasPriceGwei = 10;
+    const gasPriceWei = web3.utils.toWei(gasPriceGwei, "gwei");
 
-    // const etherAmount = web3.utils.toWei(amount.toString(), "ether");
-    // console.log("etherAmount: ", etherAmount);
     const weiAmount = web3.utils.toWei(amount, "wei");
 
     const transaction = fundraiserContract.methods.contribute().send({
       from: accounts[0],
       value: weiAmount,
-      gasPrice: await web3.eth.getGasPrice(),
+      gasPrice: gasPriceWei,
       gas: await fundraiserContract.methods.contribute().estimateGas({
         from: accounts[0],
         value: weiAmount,
       }),
     });
+
+    // const transaction = fundraiserContract.methods.contribute().send({
+    //   from: accounts[0],
+    //   value: weiAmount,
+    //   gasPrice: await web3.eth.getGasPrice(),
+    //   gas: await fundraiserContract.methods.contribute().estimateGas({
+    //     from: accounts[0],
+    //     value: weiAmount,
+    //   }),
+    // });
 
     const result = await transaction;
     console.log("result: " + result.transactionHash);
@@ -347,10 +363,17 @@ app.delete("/remove-fundraiser/:fundraiserAddress", async (req, res) => {
       gas,
     };
 
+    const gasPriceGwei = 10;
+    const gasPriceWei = web3.utils.toWei(gasPriceGwei, "gwei");
+
     const result = await transaction.send({
       ...options,
-      gasPrice: await web3.eth.getGasPrice(),
+      gasPrice: gasPriceWei,
     });
+    // const result = await transaction.send({
+    //   ...options,
+    //   gasPrice: await web3.eth.getGasPrice(),
+    // });
 
     res.status(200).json({ transactionHash: result.transactionHash });
   } catch (error) {
